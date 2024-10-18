@@ -56,7 +56,9 @@ const Header = () => {
               className="bg-transparent px-4 py-1 outline-none border-none hidden lg:block"
               onChange={(e) => setSearchInput(e.target.value)}
             />
-            <button className="text-2xl text-white" type="submit">
+            <button
+            onClick={handleSubmit}
+             className="text-2xl text-white" type="submit">
               <IoSearchOutline />
             </button>
           </form>
