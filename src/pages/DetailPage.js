@@ -72,8 +72,7 @@ const DetailPage = () => {
             <p>View : {Number(data?.vote_count)}</p>
             <span>|</span>
             <p className="">
-              {" "}
-              Duration : {duration[0]}h {duration[1]}m{" "}
+              Duration : {duration[0]}h {duration[1]}m
             </p>
           </div>
           <Divider />

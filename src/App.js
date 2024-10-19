@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import MobileNavigation from "./components/MobileNavigation";
@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { setBannerData, setImageURL } from "./store/movieoSlice";
 function App() {
   const dispatch = useDispatch();
-
+  const location = useLocation() // For login
   const fetchTrendingData = async () => {
     try {
       const response = await axios.get("/trending/all/week");
@@ -34,11 +34,11 @@ function App() {
 
   return (
     <main className="pb-14 lg:pb-0 ">
-      <Header />
+      {location.pathname !== '/login' && <Header />}
       <div className="min-h-[90vh]">
         <Outlet />
       </div>
-      <Footer />
+      {location.pathname !== '/login' && <Footer />}
       <MobileNavigation />
     </main>
   );
