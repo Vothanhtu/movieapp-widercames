@@ -4,6 +4,7 @@ import userIcon from "../assets/user.svg";
 import { NavLink, useNavigate, Link, useLocation } from "react-router-dom";
 import { IoSearchOutline } from "react-icons/io5";
 import { navigation } from "../contants/navigation";
+import UserInformation from "../pages/UserInformation";
 const Header = () => {
   const location = useLocation();
   const removeSpace = location.search?.slice(3).split("%20").join(" ");
@@ -100,12 +101,12 @@ const Header = () => {
             />
             {isLoggedIn ? (
               <>
-                <span>Xin chào, {username}!</span>
+                <span className="text-white">Xin chào, {username}!</span>
                 {showMenu && (
                   <ul 
                     onMouseLeave={handleMouseLeaveMenu}
                     className="absolute mt-7 ml-8 bg-neutral-500 shadow-md rounded-md p-2">
-                    <Link to={"/user-info"}>
+                    <Link to={`/user-info`}>
                       <li className="cursor-pointer hover:text-white">
                         User infomation
                         </li>
