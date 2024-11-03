@@ -1,28 +1,23 @@
 import React, { useEffect, useState } from "react";
 import '../App.css'
 import { Link, useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../store/firebase';
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate()
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const storedUsername = getCookie('username');
-    const storedPassword = getCookie('password');
-    if (username === storedUsername && password === storedPassword) {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log('Logged in:', userCredential.user); 
       navigate('/')
-    } else {
-      alert("Tên đăng nhập hoặc mật khẩu không đúng");
+    } catch (error) {
+      console.error('Error logging in:', error);
+      alert('Invalid email or password');
     }
   };
-  const getCookie = (name) => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-  };
-  useEffect(() => {
-    setUsername(getCookie('username'));
-  }, []);
   return (
     <div className="bg-login flex flex-col items-center justify-center min-h-screen">
       <div className="bg-neutral-900 w-[600px] h-[650px] shadow-md rounded px-20 pt-12">
@@ -31,11 +26,11 @@ const Login = () => {
           <div>
             <input
               type="text"
-              name="username"
-              placeholder="Username"
+              name="email"
+              placeholder="Email"
               required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="h-[60px] text-xl bg-neutral-600 mt-1 p-2 w-full border text-neutral-100 border-gray-300 rounded-md shadow-sm"
             />
           </div>
@@ -67,7 +62,7 @@ const Login = () => {
             </button>
             <Link to={"/"}>Forgot password?</Link>
             <div className="inline-flex gap-2">
-              <p>You don't have an account yet?</p>
+              <p>You already have an account?</p>
               <Link to={"/register"} className="text-white font-bold cursor-pointer">Register now</Link>
             </div>
           </div>

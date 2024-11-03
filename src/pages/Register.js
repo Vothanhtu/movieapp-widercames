@@ -1,22 +1,33 @@
 import React, { useState } from "react";
 import '../App.css'
 import { Link } from "react-router-dom";
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../store/firebase';
 const Register = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const handleSubmit = (e) => {
-        e.preventDefault(); 
-        // Validate passwords (ensure they match)
-        if (password !== confirmPassword) {
-          alert('Passwords do not match. Please try again.');
-          return;
-        }
-        document.cookie = `username=${username}`;
-        document.cookie = `password=${password}`;
-        window.location.href = '/login'; 
-      };
-
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      if (password !== confirmPassword)  
+      {
+        alert('Passwords do not match. Please try again.');
+        return;
+      }
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        console.log('User registered:', userCredential.user);  
+  
+        alert('Registration successful! Please log in.');
+        window.location.href = '/login';
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+      } catch (error) {
+        console.error('Error registering:', error);
+        alert('Registration failed. Please try again.');
+      }
+  };
 
   return (
     <div className="bg-login flex flex-col items-center justify-center min-h-screen">
@@ -26,11 +37,11 @@ const Register = () => {
           <div>
             <input
               type="text"
-              name="username"
-              placeholder="Username"
+              name="email"
+              placeholder="Email"
               required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="h-[60px] text-xl bg-neutral-600 mt-1 p-2 w-full border text-neutral-100 border-gray-300 rounded-md shadow-sm"
             />
           </div>

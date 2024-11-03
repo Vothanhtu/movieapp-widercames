@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
-import { CiEdit } from "react-icons/ci";
-import Divider from "../components/Divider";
+import { useSelector } from "react-redux";
 const UserInformation = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const handleImageUpload = (event) => {
@@ -14,15 +13,17 @@ const UserInformation = () => {
 
     reader.readAsDataURL(file);
   };
+  const username = useSelector((state) => state.userData.username);
+  console.log(username);
   return (
     <section className=" w-full min-h-screen mx-auto flex items-center justify-center">
       <div className="container bg-[#25252D] rounded-md w-[900px] h-[520px] flex shadow-xl gap-16">
         <div className="mt-20 ml-20 flex flex-col items-center gap-5">
-          <div className=" mb-4 w-full">
+          <div className=" mb-4 w-48 h-48">
             <img
               src={selectedImage}
               alt="Avatar user"
-              className="object-cover w-48 h-48 rounded-full"
+              className="rounded-full object-cover w-full h-full "
             />
           </div>
           <input
@@ -35,7 +36,7 @@ const UserInformation = () => {
             htmlFor="fileInput"
             className="cursor-pointer rounded-full border px-2 py-1"
           >
-            Đổi ảnh đại diện
+            Change avatar
           </label>
         </div>
         <div className="w-full">
@@ -45,12 +46,12 @@ const UserInformation = () => {
                 htmlFor="username"
                 className="block text-sm font-medium text-gray-300 mb-1"
               >
-                Tên người dùng
+                Username
               </label>
               <input
                 type="text"
                 id="username"
-                defaultValue="Nihao"
+                value={username}
                 className="w-full px-3 py-2 text-white bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>

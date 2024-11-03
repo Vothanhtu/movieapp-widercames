@@ -4,10 +4,10 @@ import userIcon from "../assets/user.svg";
 import { NavLink, useNavigate, Link, useLocation } from "react-router-dom";
 import { IoSearchOutline } from "react-icons/io5";
 import { navigation } from "../contants/navigation";
-import UserInformation from "../pages/UserInformation";
+import { auth } from '../store/firebase';
 const Header = () => {
   const location = useLocation();
-  const removeSpace = location.search?.slice(3).split("%20").join(" ");
+  //const removeSpace = location.search?.slice(3).split("%20").join(" ");
   const [searchInput, setSearchInput] = useState("");
   const [username, setUsername] = useState("");
   const [showMenu, setShowMenu] = useState(false);
@@ -21,15 +21,17 @@ const Header = () => {
   };
   // useEffect for login
   useEffect(() => {
-    const getCookie = (name) => {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(";").shift();
-    };
-    setUsername(getCookie("username"));
-    const storedUsername = getCookie("username");
-    setIsLoggedIn(!!storedUsername);
-  }, []);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUsername(user.displayName || user.email);
+        setIsLoggedIn(true);
+      } else {
+        setUsername('');
+        setIsLoggedIn(false);
+      }
+    });
+    return () => unsubscribe();
+  }, [auth]);
 
   const handleUserIconClick = () => {
     setShowMenu(!showMenu);
@@ -43,6 +45,7 @@ const Header = () => {
       "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     setIsLoggedIn(false);
     setShowMenu(false);
+    navigate("/login");
   };
 
   return (
@@ -101,7 +104,7 @@ const Header = () => {
             />
             {isLoggedIn ? (
               <>
-                <span className="text-white">Xin chào, {username}!</span>
+                <span className="text-white">Hello, {username}!</span>
                 {showMenu && (
                   <ul 
                     onMouseLeave={handleMouseLeaveMenu}
@@ -123,7 +126,7 @@ const Header = () => {
                 to={"/login"}
                 className="hover:text-neutral-100 cursor-pointer"
               >
-                Đăng nhập
+                Log In
               </Link>
             )}
           </div>
