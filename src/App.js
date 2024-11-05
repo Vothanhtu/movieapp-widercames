@@ -34,11 +34,11 @@ function App() {
 
   return (
     <main className="pb-14 lg:pb-0 ">
-      {location.pathname !== '/login' && <Header />}
+      {location.pathname !== '/register' && location.pathname !== '/login'  && <Header />}
       <div className="min-h-[90vh]">
         <Outlet />
       </div>
-      {location.pathname !== '/login' && <Footer />}
+      {location.pathname !== '/register' && location.pathname !== '/login'  && <Footer />}
       <MobileNavigation />
     </main>
   );

@@ -1,7 +1,6 @@
 
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-
+import { getAuth} from "firebase/auth";
 const firebaseConfig = {
   apiKey: "AIzaSyBKjCYCtjGlnaBtJUWt2PuvfH8IH6H_miA",
   authDomain: "widercames.firebaseapp.com",
@@ -13,6 +12,6 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);   
+const app = initializeApp(firebaseConfig); 
 const auth = getAuth(app); 
 export { auth };

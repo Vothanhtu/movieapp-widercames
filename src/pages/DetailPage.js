@@ -23,7 +23,7 @@ const DetailPage = () => {
 
   const [playVideo, setPlayVideo] = useState(false);
   const [playVideoId, setPlayVideoId] = useState("");
-  const [itemsToShow, setItemsToShow] = useState(10);
+  const [itemsToShow, setItemsToShow] = useState(8);
   const [showMore, setShowMore] = useState(false);
 
   // console.log(data);

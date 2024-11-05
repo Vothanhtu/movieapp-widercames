@@ -20,14 +20,14 @@ const Login = () => {
   };
   return (
     <div className="bg-login flex flex-col items-center justify-center min-h-screen">
-      <div className="bg-neutral-900 w-[600px] h-[650px] shadow-md rounded px-20 pt-12">
+      <div className="bg-neutral-900 w-[500px] h-[550px] shadow-md rounded px-20 pt-12">
         <h1 className="text-3xl font-bold text-white text-center mb-4">Login</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input
               type="text"
               name="email"
-              placeholder="Email"
+              placeholder="Enter your email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -38,7 +38,7 @@ const Login = () => {
             <input
               type="password"
               name="password"
-              placeholder="Password"
+              placeholder="Enter your password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -62,8 +62,8 @@ const Login = () => {
             </button>
             <Link to={"/"}>Forgot password?</Link>
             <div className="inline-flex gap-2">
-              <p>You already have an account?</p>
-              <Link to={"/register"} className="text-white font-bold cursor-pointer">Register now</Link>
+              <p>New to Widercames?</p>
+              <Link to={"/register"} className="text-white font-bold cursor-pointer">Create an account</Link>
             </div>
           </div>
         </form>

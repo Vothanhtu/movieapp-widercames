@@ -5,6 +5,7 @@ import { NavLink, useNavigate, Link, useLocation } from "react-router-dom";
 import { IoSearchOutline } from "react-icons/io5";
 import { navigation } from "../contants/navigation";
 import { auth } from '../store/firebase';
+import { signOut } from "firebase/auth";
 const Header = () => {
   const location = useLocation();
   //const removeSpace = location.search?.slice(3).split("%20").join(" ");
@@ -32,7 +33,6 @@ const Header = () => {
     });
     return () => unsubscribe();
   }, [auth]);
-
   const handleUserIconClick = () => {
     setShowMenu(!showMenu);
   };
@@ -40,17 +40,21 @@ const Header = () => {
     setShowMenu(false);
   };
 
-  const handleLogout = () => {
-    document.cookie =
-      "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    setIsLoggedIn(false);
-    setShowMenu(false);
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setUsername('');
+      setIsLoggedIn(false);
+      setShowMenu(false);
+      navigate('/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   return (
     <header className="fixed top-0 w-full h-16 bg-black bg-opacity-75 z-40">
-      <div className="container mx-auto px-4 flex items-center h-full">
+      <div className="container mx-auto px-16 flex items-center h-full">
         <Link to={"/"}>
           <img src={logo} alt="logo" width={150} />
         </Link>
@@ -93,38 +97,39 @@ const Header = () => {
               <IoSearchOutline />
             </button>
           </form>
-          <div className="flex items-center justify-center gap-3">
-            <img
-              src={userIcon}
-              alt="user-icon"
-              width="w-full h-full"
-              onClick={handleUserIconClick}
-              className="w-10 h-10 rounded-full 
-                cursor-pointer active:scale-50 transition-all"
-            />
+          <div className="relative">
             {isLoggedIn ? (
               <>
-                <span className="text-white">Hello, {username}!</span>
+                {/* <span className="text-white">Hello, {username}!</span> */}                              
+                <img
+                    src={userIcon}
+                    alt="user-icon"
+                    width="w-full h-full"
+                    onClick={handleUserIconClick}
+                    className="w-10 h-10 rounded-full
+                      cursor-pointer active:scale-50 transition-all"
+                  />
                 {showMenu && (
-                  <ul 
-                    onMouseLeave={handleMouseLeaveMenu}
-                    className="absolute mt-7 ml-8 bg-neutral-500 shadow-md rounded-md p-2">
-                    <Link to={`/user-info`}>
-                      <li className="cursor-pointer hover:text-white">
-                        User infomation
-                        </li>
-                    </Link>
-                    <li 
-                      onClick={handleLogout}
-                      className="cursor-pointer hover:text-white">
-                      Log out</li>
-                  </ul>
+                    <ul 
+                      onMouseLeave={handleMouseLeaveMenu}
+                      className="absolute bg-neutral-500 shadow-md rounded-md p-2 user-icon-menu
+                      w-36 h-18 mt-2 ml-[-60px]">
+                      <Link to={`/user-info`}>
+                        <li className="cursor-pointer hover:text-white w-full">
+                          User infomation
+                          </li>
+                      </Link>
+                      <li 
+                        onClick={handleLogout}
+                        className="cursor-pointer hover:text-white">
+                        Log out</li>
+                    </ul>
                 )}
               </>
             ) : (
               <Link
                 to={"/login"}
-                className="hover:text-neutral-100 cursor-pointer"
+                className=" font-bold  hover:text-neutral-100 cursor-pointer"
               >
                 Log In
               </Link>
